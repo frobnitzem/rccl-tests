@@ -36,7 +36,7 @@ testResult_t AllReduceInitData(struct threadArgs* args, ncclDataType_t type, ncc
   int k = 0;
   for (int i=0; i<args->nGpus; i++) {
     int gpuid = args->localRank*args->nThreads*args->nGpus + args->thread*args->nGpus + i;
-    if (args->enable_multiranks)
+    //if (args->enable_multiranks)
       gpuid = gpuid % args->localNumDevices;
     HIPCHECK(hipSetDevice(gpuid));
 

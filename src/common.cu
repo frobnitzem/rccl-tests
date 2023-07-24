@@ -842,7 +842,7 @@ testResult_t threadRunTests(struct threadArgs* args) {
   // will be done on the current GPU (by default : 0) and if the GPUs are in
   // exclusive mode those operations will fail.
   int gpuid = args->localRank*args->nThreads*args->nGpus + args->thread*args->nGpus;
-  if (enable_multiranks)
+  //if (enable_multiranks)
     gpuid = gpuid % numDevices;
   HIPCHECK(hipSetDevice(gpuid));
   TESTCHECK(ncclTestEngine.runTest(args, ncclroot, (ncclDataType_t)nccltype, test_typenames[nccltype], (ncclRedOp_t)ncclop, test_opnames[ncclop]));
@@ -860,7 +860,7 @@ testResult_t threadInit(struct threadArgs* args) {
   NCCLCHECK(ncclGroupStart());
   for (int i=0; i<args->nGpus; i++) {
     int gpuid = args->localRank*args->nThreads*args->nGpus + args->thread*args->nGpus + i;
-    if (enable_multiranks)
+    //if (enable_multiranks)
       gpuid = gpuid % numDevices;
     HIPCHECK(hipSetDevice(gpuid));
 
@@ -1192,7 +1192,7 @@ testResult_t run() {
   size_t maxMem = ~0;
   for (int i=0; i<nThreads*nGpus; i++) {
     int hipDev = localRank*nThreads*nGpus+i;
-    if (enable_multiranks)
+    //if (enable_multiranks)
       hipDev = hipDev % numDevices;
     hipDeviceProp_t prop;
     HIPCHECK(hipGetDeviceProperties(&prop, hipDev));
@@ -1245,7 +1245,7 @@ testResult_t run() {
 
   for (int ii=0; ii<nGpus*nThreads; ii++) {
     int gpuid = localRank*nThreads*nGpus+ii;
-    if (enable_multiranks)
+    //if (enable_multiranks)
       gpuid = gpuid % numDevices;
     HIPCHECK(hipSetDevice(gpuid));
     for (int j=0; j<ranksPerGpu; j++) {
@@ -1276,9 +1276,8 @@ testResult_t run() {
        NCCLCHECK(ncclGroupStart());
        for (int ii=0; ii<nGpus*nThreads; ii++) {
 	 int gpuid = localRank*nThreads*nGpus+ii;
-         if (enable_multiranks) {
+         //if (enable_multiranks)
 	   gpuid = gpuid % numDevices;
-	 }
          HIPCHECK(hipSetDevice(gpuid));
 	 if (!enable_multiranks) {
 	   NCCLCHECK(ncclCommInitRank(comms+ii, nProcs*nThreads*nGpus, ncclId, proc*nThreads*nGpus+ii));
